@@ -1,9 +1,12 @@
-from MOTVOY_III import MOTVOY_III
-
-import speech_recognition as sr
 import os
 from tkinter import Tk, filedialog
+
+import speech_recognition as sr
 import win32com.client
+import win32gui
+import win32con
+
+from MOTVOY_III import MOTVOY_III
 
 root = Tk()
 root.withdraw()
@@ -22,13 +25,14 @@ def listen_for_activation(recognizer, microphone):
         if ("алло компьютер" in phrase or "компьютер алло" in phrase or
                 "computer алло" in phrase or "алло computer" in phrase):
             print("Слушаю...")
-            return True
+            return True, False
     except sr.UnknownValueError:
         pass  # Речь не распознана
     except sr.RequestError as e:
         print(f"Ошибка сервиса распознавания: {e}")
+        return False, True
 
-    return False
+    return False, False
 
 
 def listen_command(recognizer, microphone):
@@ -57,7 +61,8 @@ def main():
     running = True
     while running:
         try:
-            if listen_for_activation(recognizer, microphone):
+            activated, error = listen_for_activation(recognizer, microphone)
+            if activated and not error:
                 motvoy.say("assets/listening.wav")
                 command = listen_command(recognizer, microphone).lower()
                 if command != "":
@@ -82,6 +87,10 @@ def main():
                                 os.startfile(os.path.join("shortcuts", f"{' '.join(command.split()[1:])}.lnk"))
                                 motvoy.say("assets/opening.wav")
 
+                    elif command == "сверни окно":
+                        hwnd = win32gui.GetForegroundWindow()
+                        win32gui.ShowWindow(hwnd, win32con.SW_MINIMIZE)
+
                     elif command == "работа завершена":
                         running = False
 
@@ -91,6 +100,9 @@ def main():
 
                     else:
                         motvoy.say(output_path="assets/cannot_do.wav")
+
+            elif error:
+                motvoy.say(output_path="assets/no_internet.wav")
 
         except KeyboardInterrupt:
             running = False
