@@ -12,8 +12,6 @@ if current_version != last_version:
     print("Обновление")
     with open("MOTVOY_III.py", "w", encoding="utf-8") as file:
         file.write(requests.get(f"{repo}/MOTVOY_III.py").text)
-    with open("generate_voice.py", "w", encoding="utf-8") as file:
-        file.write(requests.get(f"{repo}/generate_voice.py").text)
     with open("main.py", "w", encoding="utf-8") as file:
         file.write(requests.get(f"{repo}/main.py").text)
     with open("version.txt", "w", encoding="utf-8") as file:
