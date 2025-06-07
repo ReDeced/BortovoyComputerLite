@@ -89,7 +89,7 @@ def main():
                         running = False
 
                     else:
-                        print(command)
+                        motvoy.say("", output_path="assets/cannot_do.wav")
 
         except KeyboardInterrupt:
             running = False
