@@ -19,7 +19,8 @@ def listen_for_activation(recognizer, microphone):
         phrase = recognizer.recognize_google(audio, language="ru-RU").lower()
         print(f"Распознано: {phrase}")
 
-        if "алло компьютер" in phrase or "компьютер алло" in phrase:
+        if ("алло компьютер" in phrase or "компьютер алло" in phrase or
+                "computer алло" in phrase or "алло computer" in phrase):
             print("Слушаю...")
             return True
     except sr.UnknownValueError:
@@ -89,7 +90,7 @@ def main():
                         running = False
 
                     else:
-                        motvoy.say("", output_path="assets/cannot_do.wav")
+                        motvoy.say(output_path="assets/cannot_do.wav")
 
         except KeyboardInterrupt:
             running = False
