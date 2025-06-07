@@ -22,6 +22,6 @@ class MOTVOY_III:
 
 
     def close(self):
-        self.say("Завершение работы", wait=True)
+        self.say("assets/shutting_down.wav", wait=True)
         shutil.rmtree(f"./temp", ignore_errors=False)
         os.mkdir("temp")
